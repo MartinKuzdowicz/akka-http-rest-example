@@ -12,15 +12,18 @@ object Application extends App {
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
 
+  val host = "localhost"
+  val port = 8080
+
   val route = path("") {
     get {
       complete(200, "it si working akka http server !")
     }
   }
 
-  val server = Http().bindAndHandle(route, "localhost", 8080)
+  val server = Http().bindAndHandle(route, host, port)
 
-  println("starting server at port 8080")
+  println(s"starting server at host: ${host}  port: ${port}")
 
 
 }
