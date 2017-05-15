@@ -2,18 +2,7 @@ package com.mkuzdowicz.akkahttp.rest
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.StatusCodes.OK
-import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import spray.json.DefaultJsonProtocol
-
-
-final case class Order(prize: Double, description: String)
-
-trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit val orderFormat = jsonFormat2(Order)
-}
 
 object Application extends App with JsonSupport {
 
@@ -24,19 +13,9 @@ object Application extends App with JsonSupport {
   val host = "localhost"
   val port = 8080
 
-  val route =
-    path("cars") {
-      get {
-        complete(OK, List(Order(30.55, "car")))
-      }
-    } ~ path("bikes") {
-      get {
-        complete(OK,  List(Order(100.55, "bike")))
-      }
-    }
+  val allRoutes = OrdersService.routes()
 
-
-  val server = Http().bindAndHandle(route, host, port)
+  val server = Http().bindAndHandle(allRoutes, host, port)
 
   println(s"starting server at host: ${host}  port: ${port}")
 
