@@ -28,9 +28,10 @@ object MongoDatabase {
   }
 
   def findTicker(ticker: String): Future[Option[BSONDocument]] = {
-    val query = BSONDocument("Ticker" -> ticker)
+    val query = BSONDocument()
+    val filter = BSONDocument("Ticker" -> ticker)
 
-    MongoDatabase.collection.find(query).one
+    MongoDatabase.collection.find(query, filter).one
   }
 
 }
